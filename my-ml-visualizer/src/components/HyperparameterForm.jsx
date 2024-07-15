@@ -26,7 +26,7 @@ const HyperparameterForm = ({ onParamsChange }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form">
       <div>
         <label>
           Ridge Alpha:
