@@ -6,6 +6,8 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, A
 from sklearn.svm import SVR
 from sklearn.ensemble import BaggingRegressor
 import numpy as np
+import os
+
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -63,6 +65,36 @@ def gradient_descent():
         "history": [{"x": hx, "y": hy} for hx, hy in history]
     }
     return jsonify(result)
+
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        return jsonify({'message': 'File uploaded successfully', 'filepath': filepath})
+
+@app.route('/clean', methods=['POST'])
+def clean_data():
+    filepath = request.json['filepath']
+    try:
+        df = pd.read_csv(filepath)
+        # Basic data cleaning
+        df.dropna(inplace=True)  # Remove missing values
+        df.drop_duplicates(inplace=True)  # Remove duplicates
+        cleaned_filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'cleaned_' + os.path.basename(filepath))
+        df.to_csv(cleaned_filepath, index=False)
+        return jsonify({'message': 'Data cleaned successfully', 'cleaned_filepath': cleaned_filepath})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

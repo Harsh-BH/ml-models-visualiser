@@ -10,6 +10,7 @@ import Histogram from "./components/Histogram";
 import LineGraph from "./components/LineGraph";
 import ViolinPlot from "./components/ViolinPlot";
 import BellCurve from "./components/BellCurve";
+import UploadDataset from "./components/UploadDataset";
 import "./App.css";
 
 const App = () => {
@@ -64,6 +65,9 @@ const App = () => {
           <h1>Machine Learning Model Visualizer</h1>
           <Link to="/dataset" className="nav-button">
             View Dataset
+          </Link>
+          <Link to="/upload" className="nav-button">
+            Upload Dataset
           </Link>
           <HyperparameterForm onParamsChange={handleParamsChange} />
           <h2>Gradient Descent Visualizer</h2>
@@ -145,6 +149,7 @@ const App = () => {
               }
             />
             <Route path="/dataset" element={<DatasetViewer data={data} />} />
+            <Route path="/upload" element={<UploadDataset />} />
             <Route path="/scatter" element={<ScatterPlot data={data} />} />
             <Route path="/histogram" element={<Histogram data={data} />} />
             <Route path="/linegraph" element={<LineGraph data={data} />} />

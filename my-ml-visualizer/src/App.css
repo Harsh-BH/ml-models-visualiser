@@ -121,12 +121,14 @@ button:hover {
   justify-content: center;
 }
 
-.dataset-viewer {
+.dataset-viewer,
+.upload-container {
   width: 100%;
   padding: 20px;
   background-color: #2c2c2e;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 
 .dataset-viewer pre {
@@ -135,6 +137,10 @@ button:hover {
   border-radius: 4px;
   overflow: auto;
   color: #e5d9d9;
+}
+
+.upload-container input[type="file"] {
+  margin-bottom: 20px;
 }
 
 @media (max-width: 768px) {
