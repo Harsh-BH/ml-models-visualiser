@@ -7,6 +7,9 @@ const HyperparameterForm = ({ onParamsChange }) => {
     tree_max_depth: null,
     forest_n_estimators: 100,
     svm_C: 1.0,
+    bagging_n_estimators: 10,
+    boosting_n_estimators: 100,
+    boosting_learning_rate: 0.1,
   });
 
   const handleChange = (e) => {
@@ -19,6 +22,7 @@ const HyperparameterForm = ({ onParamsChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Submitting params:", params); // Debugging
     onParamsChange(params);
   };
 
@@ -79,6 +83,40 @@ const HyperparameterForm = ({ onParamsChange }) => {
             value={params.svm_C}
             onChange={handleChange}
             step="0.1"
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Bagging N Estimators:
+          <input
+            type="number"
+            name="bagging_n_estimators"
+            value={params.bagging_n_estimators}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Boosting N Estimators:
+          <input
+            type="number"
+            name="boosting_n_estimators"
+            value={params.boosting_n_estimators}
+            onChange={handleChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Boosting Learning Rate:
+          <input
+            type="number"
+            name="boosting_learning_rate"
+            value={params.boosting_learning_rate}
+            onChange={handleChange}
+            step="0.01"
           />
         </label>
       </div>

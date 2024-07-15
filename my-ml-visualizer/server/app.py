@@ -2,8 +2,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, AdaBoostRegressor
 from sklearn.svm import SVR
+from sklearn.ensemble import BaggingRegressor
 import numpy as np
 
 app = Flask(__name__)
@@ -28,7 +29,10 @@ def predict():
         "lasso_regression": Lasso(alpha=float(params.get('lasso_alpha', 1.0))),
         "decision_tree": DecisionTreeRegressor(max_depth=int(params.get('tree_max_depth', None)) if params.get('tree_max_depth', None) else None),
         "random_forest": RandomForestRegressor(n_estimators=int(params.get('forest_n_estimators', 100))),
-        "svm": SVR(C=float(params.get('svm_C', 1.0)))
+        "svm": SVR(C=float(params.get('svm_C', 1.0))),
+        "bagging": BaggingRegressor(base_estimator=DecisionTreeRegressor(), n_estimators=int(params.get('bagging_n_estimators', 10))),
+        "gradient_boosting": GradientBoostingRegressor(n_estimators=int(params.get('boosting_n_estimators', 100)), learning_rate=float(params.get('boosting_learning_rate', 0.1))),
+        "ada_boosting": AdaBoostRegressor(n_estimators=int(params.get('boosting_n_estimators', 50)), learning_rate=float(params.get('boosting_learning_rate', 1.0))),
     }
 
     # Train models

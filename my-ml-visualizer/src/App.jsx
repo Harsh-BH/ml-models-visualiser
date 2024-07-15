@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ModelVisualizer from "./components/ModelVisualizer";
 import HyperparameterForm from "./components/HyperparameterForm";
 import GradientDescentVisualizer from "./components/GradientDescentVisualizer";
+import "./App.css";
 
 const App = () => {
   const [data, setData] = useState({ x: [1, 2, 3, 4, 5], y: [2, 4, 6, 8, 10] });
@@ -13,6 +14,9 @@ const App = () => {
     tree_max_depth: null,
     forest_n_estimators: 100,
     svm_C: 1.0,
+    bagging_n_estimators: 10,
+    boosting_n_estimators: 100,
+    boosting_learning_rate: 0.1,
   });
   const [gradientParams, setGradientParams] = useState({
     learning_rate: 0.1,
@@ -20,10 +24,16 @@ const App = () => {
     initial_x: 5,
   });
 
+  useEffect(() => {
+    fetchPredictions(params);
+  }, [params]);
+
   const fetchPredictions = (params) => {
+    console.log("Fetching predictions with params:", params); // Debugging
     axios
       .post("http://localhost:5000/predict", { input: data.x, params })
       .then((response) => {
+        console.log("Received predictions:", response.data); // Debugging
         setPredictions(response.data);
       })
       .catch((error) => {
@@ -41,10 +51,12 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Machine Learning Model Visualizer</h1>
       <HyperparameterForm onParamsChange={handleParamsChange} />
-      <ModelVisualizer data={data} predictions={predictions} />
+      <div className="plots">
+        <ModelVisualizer data={data} predictions={predictions} />
+      </div>
       <h2>Gradient Descent Visualizer</h2>
       <form
         onSubmit={(e) => {
@@ -89,11 +101,13 @@ const App = () => {
         </div>
         <button type="submit">Update Gradient Descent</button>
       </form>
-      <GradientDescentVisualizer
-        learningRate={gradientParams.learning_rate}
-        iterations={gradientParams.iterations}
-        initialX={gradientParams.initial_x}
-      />
+      <div className="plots">
+        <GradientDescentVisualizer
+          learningRate={gradientParams.learning_rate}
+          iterations={gradientParams.iterations}
+          initialX={gradientParams.initial_x}
+        />
+      </div>
     </div>
   );
 };
