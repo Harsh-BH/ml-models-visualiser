@@ -22,7 +22,6 @@ const HyperparameterForm = ({ onParamsChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting params:", params); // Debugging
     onParamsChange(params);
   };
 
